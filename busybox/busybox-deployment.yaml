@@ -2,7 +2,6 @@ nd: Deployment
 apiVersion: apps/v1
 metadata:
   name: busybox
-  namespace: default
   labels:
     app: busybox
 spec:
