@@ -1,0 +1,51 @@
+nd: Deployment
+apiVersion: apps/v1
+metadata:
+  name: busybox
+  namespace: default
+  labels:
+    app: busybox
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: busybox
+    spec:
+      restartPolicy: Always
+      serviceAccountName: deployer
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 3
+      dnsConfig: {}
+      securityContext: {}
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: hello-hyperkuber
+          command:
+            - sleep
+          securityContext:
+            capabilities: {}
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: File
+          image: 'busybox:latest'
+          args:
+            - '10000'
+      automountServiceAccountToken: true
+      serviceAccount: default
+      dnsPolicy: ClusterFirst
+      tolerations:
+        - key: a
+          operator: Exists
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
